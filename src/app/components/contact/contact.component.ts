@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.interface';
 import { ContactService } from 'src/app/services/contact.service';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import { query } from '@angular/animations';
 
 @Component({
   selector: 'app-contact',
@@ -9,38 +12,39 @@ import { ContactService } from 'src/app/services/contact.service';
 })
 export class ContactComponent {
   contacts:Contact[]=[];
-  newContact: Contact = { id: 0, name: '', email: '', phone: '' };
+    
   searchQuery: string = '';
+  
   displayedColumns: string[] = ['id', 'name', 'email', 'phone','actions'];
 
-  constructor(private contactService:ContactService) { }
+  constructor(private contactService:ContactService,private dialog:MatDialog) { }
 
   ngOnInit(): void {
    this.getContacts();
-   console.log(this.contacts)
   }
 
   getContacts():void{
-   this.contacts= this.contactService.getContacts();
+    this.contactService.getContacts().subscribe((contacts)=>{
+        this.contacts=contacts;
+    });
   }
 
-  addContact(): void {
-    this.contactService.addContact(this.newContact);
-    this.newContact = { id: 0, name: '', email: '', phone: '' };
-    this.ngOnInit; 
-  }
-
-  deleteContact(id: number): void {
-    this.contactService.deleteContact(id);
-    this.ngOnInit;
+  deleteContact(contact: Contact): void {
+    this.contactService.deleteContact(contact);
   }
 
   updateContact(contact: Contact): void {
-    this.contactService.updateContact(contact);
-    this.ngOnInit; 
+    const dialogRef = this.dialog.open(AddDialogComponent, {
+      data: contact, // Pass the element data to the dialog
+    });
   }
 
-  searchContacts(): void {
-    this.contacts = this.contactService.searchContact(this.searchQuery);
+  searchContacts(searchQuery:string){
+   this.contacts=this.contactService.searchContact(searchQuery);
   }
+
+  openDialog(){
+    this.dialog.open(AddDialogComponent);
+  }
+
 }
