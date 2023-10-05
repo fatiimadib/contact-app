@@ -1,0 +1,30 @@
+<div mat-dialog-title>
+    <h1>Contact Form</h1>
+</div>
+<form>
+<div mat-dialog-content class="content">
+
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput name="text" placeholder="Ex. Fatima" [(ngModel)]="newContact.name">
+        </mat-form-field>
+    </div>
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput name="Email" placeholder="Ex. e@example.com" [(ngModel)]="newContact.email">
+        </mat-form-field>
+    </div>
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput name="Phone" placeholder="Ex. 1234567" [(ngModel)]="newContact.phone">
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions  class="actions">
+    <button mat-raised-button (click)="Close()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="addContact()">Save</button>
+</div>
+</form>
